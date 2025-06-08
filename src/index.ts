@@ -13,24 +13,31 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
+// Rutas
 app.use('/api/compras', compraRoutes);
 app.use('/api/productos', productoRoutes);
 app.use('/api/pedidos', pedidoRoutes);
 app.use('/api/pagos', pagosRoutes);
 
 app.get('/', (_req, res) => {
-  res.send('API Cowgirls Style funcionando');
+  res.send('✅ API Cowgirls Style funcionando correctamente en Render');
 });
 
-mongoose.connect(process.env.DB_CONNECTION_STRING || '')
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor backend corriendo en el puerto ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('❌ Error conectando a MongoDB:', err);
+// Evitar reconexiones infinitas y errores silenciosos
+mongoose.connect(process.env.DB_CONNECTION_STRING || '', {
+  // Opcional: puede ayudar en Render
+  serverSelectionTimeoutMS: 5000,
+})
+.then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
   });
+})
+.catch((err) => {
+  console.error('❌ Error al conectar a MongoDB:', err.message);
+  process.exit(1); // Detener si hay error grave
+});
