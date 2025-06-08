@@ -6,8 +6,10 @@ dotenv.config();
 
 const router = express.Router();
 
-// ✅ Configurar Stripe sin apiVersion (para evitar el error)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+// ✅ Configurar Stripe con apiVersion compatible con los types instalados
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2022-11-15", // ✅ Compatible con @types/stripe que tienes
+});
 
 // Endpoint para crear pago
 router.post("/crear-pago", async (req, res) => {
@@ -20,7 +22,7 @@ router.post("/crear-pago", async (req, res) => {
         product_data: {
           name: producto.nombre,
         },
-        unit_amount: Math.round(producto.precio * 100), // en centavos
+        unit_amount: Math.round(producto.precio * 100),
       },
       quantity: 1,
     }));
