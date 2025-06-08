@@ -6,7 +6,7 @@ import cors from 'cors';
 import productoRoutes from './routes/productoRoutes';
 import pedidoRoutes from './routes/pedidoRoutes';
 import compraRoutes from './routes/compraRoutes';
-import pagosRoutes from './routes/pagos'; // ✅ IMPORTAR
+import pagosRoutes from './routes/pagos';
 
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/api/compras', compraRoutes);
 app.use('/api/productos', productoRoutes);
 app.use('/api/pedidos', pedidoRoutes);
-app.use('/api/pagos', pagosRoutes); // ✅ USAR
+app.use('/api/pagos', pagosRoutes);
 
 app.get('/', (_req, res) => {
   res.send('API Cowgirls Style funcionando');
@@ -28,7 +28,7 @@ app.get('/', (_req, res) => {
 mongoose.connect(process.env.DB_CONNECTION_STRING || '')
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
+      console.log(`🚀 Servidor backend corriendo en el puerto ${PORT}`);
     });
   })
   .catch((err) => {
